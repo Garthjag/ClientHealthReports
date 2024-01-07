@@ -1,0 +1,1615 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
+  <am:AuthoringMetadata>
+    <am:CreatedBy>
+      <am:Name>SSDTRS</am:Name>
+      <am:Version>17.8.34330.188</am:Version>
+    </am:CreatedBy>
+    <am:UpdatedBy>
+      <am:Name>SSDTRS</am:Name>
+      <am:Version>17.8.34330.188</am:Version>
+    </am:UpdatedBy>
+    <am:LastModifiedTimestamp>2024-01-06T21:04:13.4140499Z</am:LastModifiedTimestamp>
+  </am:AuthoringMetadata>
+  <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
+  <Author>Garth Jones from AskGarth</Author>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="AskGarthDS">
+      <DataSourceReference>AskGarth</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>5e57ec41-0359-4342-9d55-20767ceb377f</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="AskGarthSQL">
+      <Query>
+        <DataSourceName>AskGarthDS</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@chs">
+            <Value>=Parameters!chs.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@CHSVersion">
+            <Value>=Parameters!CHSVersion.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>Select 
+	C.Hostname as 'Hostname',
+	0 as 'ResourceID',
+	C.OperatingSystem as 'OperatingSystem',
+	C.Build as 'Build',
+	C.Manufacturer as 'Manufacturer',
+	C.Model as 'Model',
+	C.AdminShare as 'AdminShare',
+	C.Architecture as 'Architecture',
+	C.BITS as 'BITS',
+	C.CacheSize as 'CacheSize',
+	C.ClientCertificate as 'ClientCertificate',
+	C.ClientInstalled as 'ClientInstalled',
+	C.ClientInstalledReason as 'ClientInstalledReason',
+	C.ClientVersion as 'ClientVersion',
+	C.DNS as 'DNS',
+	C.Domain as 'Domain',
+	C.Drivers as 'Drivers',
+	C.HWInventory as 'HWInventory' ,
+	C.InstallDate as 'InstallDate',
+	C.LastBootTime as 'LastBootTime',
+	C.LastLoggedOnUser as 'LastLoggedOnUser',
+	C.MaxLogHistory as 'MaxLogHistory',
+	C.MaxLogSize as 'MaxLogSize',
+	C.OSDiskFreeSpace as 'OSDiskFreeSpace',
+	C.OSUpdates as 'OSUpdates',
+	C.PatchLevel as 'PatchLevel',
+	C.PendingReboot as 'PendingReboot',
+	C.ProvisioningMode as 'ProvisioningMode',
+	C.PSBuild as 'PSBuild',
+	C.PSVersion as 'PSVersion',
+	C.StateMessages as 'StateMessages',
+	C.RefreshComplianceState as 'RefreshComplianceState',
+	C.Services as 'Services',
+	C.Sitecode as 'Sitecode',
+	C.SWMetering as 'SWMetering',
+	C.Timestamp as 'Timestamp',
+	C.Updates as 'Updates',
+	C.Version as 'Version',
+	C.WMI as 'WMI',
+	C.WUAHandler as 'WUAHandler',
+	'Health Only' as 'Status'
+from 
+	ClientHealth.dbo.Clients C
+Where  
+	C.Hostname not in (Select R.Name0 From v_R_System R) 
+	and 'Health Only' in (@chs)
+	and C.Version in (@CHSVersion)
+Union
+Select 
+	R.Netbios_Name0 as 'Hostname', 
+	R.ResourceID as 'ResourceID',
+	'n/a' as 'OperatingSystem',
+	'n/a' as 'Build',
+	'n/a' as 'Manufacturer',
+	'n/a' as 'Model',
+	'n/a' as 'AdminShare',
+	'n/a' as 'Architecture',
+	'n/a' as 'BITS',
+	-1 as 'CacheSize',
+	'n/a' as 'ClientCertificate',
+	'2006-02-14' as 'ClientInstalled',
+	'n/a' as 'ClientInstalledReason',
+	'n/a' as 'ClientVersion',
+	'n/a' as 'DNS',
+	'n/a' as 'Domain',
+	'n/a' as 'Drivers',
+	'2006-02-14' as 'HWInventory' ,
+	'2006-02-14' as 'InstallDate',
+	'2006-02-14' as 'LastBootTime',
+	'n/a' as 'LastLoggedOnUser',
+	-1 as 'MaxLogHistory',
+	-1 as 'MaxLogSize',
+	-1 as 'OSDiskFreeSpace',
+	'2006-02-14' as 'OSUpdates',
+	-1 as 'PatchLevel',
+	'n/a' as 'PendingReboot',
+	'n/a' as 'ProvisioningMode',
+	-1 as 'PSBuild',
+	-1 as 'PSVersion',
+	'n/a' as 'StateMessages',
+	'2006-02-14' as 'RefreshComplianceState',
+	'n/a' as 'Services',
+	'n/a' as 'Sitecode',
+	'n/a' as 'SWMetering',
+	'2006-02-14' as 'Timestamp',
+	'n/a' as 'Updates',
+	'n/a' as 'Version',
+	'n/a' as 'WMI',
+	'n/a' as 'WUAHandler',
+	'ConfigMgr Only'  as 'Status'
+From 
+		dbo.v_R_System R
+Where 
+	R.Name0 not in (Select C.Hostname from ClientHealth.dbo.Clients C) 
+	and 'ConfigMgr Only' in (@chs)
+	and 'n/a' in (@CHSVersion)
+Union
+Select 
+	C.Hostname as 'Hostname',
+	R.ResourceID as 'ResourceID',
+	C.OperatingSystem as 'OperatingSystem',
+	C.Build as 'Build',
+	C.Manufacturer as 'Manufacturer',
+	C.Model as 'Model',
+	C.AdminShare as 'AdminShare',
+	C.Architecture as 'Architecture',
+	C.BITS as 'BITS',
+	C.CacheSize as 'CacheSize',
+	C.ClientCertificate as 'ClientCertificate',
+	C.ClientInstalled as 'ClientInstalled',
+	C.ClientInstalledReason as 'ClientInstalledReason',
+	C.ClientVersion as 'ClientVersion',
+	C.DNS as 'DNS',
+	C.Domain as 'Domain',
+	C.Drivers as 'Drivers',
+	C.HWInventory as 'HWInventory' ,
+	C.InstallDate as 'InstallDate',
+	C.LastBootTime as 'LastBootTime',
+	C.LastLoggedOnUser as 'LastLoggedOnUser',
+	C.MaxLogHistory as 'MaxLogHistory',
+	C.MaxLogSize as 'MaxLogSize',
+	C.OSDiskFreeSpace as 'OSDiskFreeSpace',
+	C.OSUpdates as 'OSUpdates',
+	C.PatchLevel as 'PatchLevel',
+	C.PendingReboot as 'PendingReboot',
+	C.ProvisioningMode as 'ProvisioningMode',
+	C.PSBuild as 'PSBuild',
+	C.PSVersion as 'PSVersion',
+	C.StateMessages as 'StateMessages',
+	C.RefreshComplianceState as 'RefreshComplianceState',
+	C.Services as 'Services',
+	C.Sitecode as 'Sitecode',
+	C.SWMetering as 'SWMetering',
+	C.Timestamp as 'Timestamp',
+	C.Updates as 'Updates',
+	C.Version as 'Version',
+	C.WMI as 'WMI',
+	C.WUAHandler as 'WUAHandler',
+	'Both' as 'Status'
+from 
+	dbo.v_R_System R
+	join ClientHealth.dbo.Clients C on R.Netbios_Name0 = C.Hostname
+Where
+	'Both' in (@chs)
+	and C.Version in (@CHSVersion)
+</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Hostname">
+          <DataField>Hostname</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Status">
+          <DataField>Status</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ResourceID">
+          <DataField>ResourceID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="OperatingSystem">
+          <DataField>OperatingSystem</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Build">
+          <DataField>Build</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Manufacturer">
+          <DataField>Manufacturer</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Model">
+          <DataField>Model</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AdminShare">
+          <DataField>AdminShare</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Architecture">
+          <DataField>Architecture</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BITS">
+          <DataField>BITS</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CacheSize">
+          <DataField>CacheSize</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ClientCertificate">
+          <DataField>ClientCertificate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ClientInstalled">
+          <DataField>ClientInstalled</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ClientInstalledReason">
+          <DataField>ClientInstalledReason</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ClientVersion">
+          <DataField>ClientVersion</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DNS">
+          <DataField>DNS</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Domain">
+          <DataField>Domain</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Drivers">
+          <DataField>Drivers</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="HWInventory">
+          <DataField>HWInventory</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="InstallDate">
+          <DataField>InstallDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="LastBootTime">
+          <DataField>LastBootTime</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="LastLoggedOnUser">
+          <DataField>LastLoggedOnUser</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="MaxLogHistory">
+          <DataField>MaxLogHistory</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="MaxLogSize">
+          <DataField>MaxLogSize</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="OSDiskFreeSpace">
+          <DataField>OSDiskFreeSpace</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="OSUpdates">
+          <DataField>OSUpdates</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="PatchLevel">
+          <DataField>PatchLevel</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="PendingReboot">
+          <DataField>PendingReboot</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ProvisioningMode">
+          <DataField>ProvisioningMode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PSBuild">
+          <DataField>PSBuild</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="PSVersion">
+          <DataField>PSVersion</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="StateMessages">
+          <DataField>StateMessages</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="RefreshComplianceState">
+          <DataField>RefreshComplianceState</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="Services">
+          <DataField>Services</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Sitecode">
+          <DataField>Sitecode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SWMetering">
+          <DataField>SWMetering</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Timestamp">
+          <DataField>Timestamp</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="Updates">
+          <DataField>Updates</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Version">
+          <DataField>Version</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="WMI">
+          <DataField>WMI</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="WUAHandler">
+          <DataField>WUAHandler</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="Version">
+      <Query>
+        <DataSourceName>AskGarthDS</DataSourceName>
+        <CommandText>Select distinct
+	C.Version as 'Version'
+from 
+	ClientHealth.dbo.Clients C
+Where  C.Hostname not in (Select R.Name0 From v_R_System R)
+Union
+Select 
+	'n/a' as 'Version'
+From 
+		dbo.v_R_System R
+Where 
+	R.Name0 not in (Select C.Hostname from ClientHealth.dbo.Clients C)
+Union
+Select 
+	C.Version as 'Version'
+from 
+	dbo.v_R_System R
+	join ClientHealth.dbo.Clients C on R.Netbios_Name0 = C.Hostname
+Order by 1</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Version">
+          <DataField>Version</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="CHS">
+      <Query>
+        <DataSourceName>AskGarthDS</DataSourceName>
+        <CommandText>Select Distinct
+	'Health Only' as 'Status',
+	2 as Sort
+from 
+	ClientHealth.dbo.Clients C
+Where  C.Hostname not in (Select R.Name0 From v_R_System R)
+Union
+Select Distinct
+	'ConfigMgr Only'  as 'Status',
+	3 as 'sort'
+From 
+		dbo.v_R_System R
+Where 
+	R.Name0 not in (Select C.Hostname from ClientHealth.dbo.Clients C)
+Union
+Select Distinct
+	'Both' as 'Status',
+	1 as 'sort'
+from 
+	dbo.v_R_System R
+	join ClientHealth.dbo.Clients C on R.Netbios_Name0 = C.Hostname
+Order by 
+	2, 1</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Status">
+          <DataField>Status</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Sort">
+          <DataField>Sort</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Textbox Name="Textbox11">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=string.format("Collection: {0} and {1}",Parameters!ConfigMgrHealth.Value,Parameters!Collection.Value)</Value>
+                    <Style>
+                      <FontSize>16pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                      <Color>#3067f2</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox11</rd:DefaultName>
+            <Top>0.75in</Top>
+            <Height>0.5in</Height>
+            <Width>13.5in</Width>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox12">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>ConfigMgr Client Health Dashboard</Value>
+                    <Style>
+                      <FontSize>36pt</FontSize>
+                      <Color>#0d0d0d</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox12</rd:DefaultName>
+            <Height>0.75in</Height>
+            <Width>13.5in</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Tablix Name="Tablix5">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>1.23333in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>0.25in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.5in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.5in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.5in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.5in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.5in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.5in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1in</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox32">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Status</Value>
+                                  <Style>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox32</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>#8b04ec</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox8">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Hostname</Value>
+                                  <Style>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox8</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>#8b04ec</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox10">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Last User</Value>
+                                  <Style>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox10</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>#8b04ec</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox16">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Timestamp</Value>
+                                  <Style>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox16</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>#8b04ec</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox20">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Manufacturer</Value>
+                                  <Style>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox20</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>#8b04ec</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox22">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Model</Value>
+                                  <Style>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox22</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>#8b04ec</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox24">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Operating System</Value>
+                                  <Style>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox24</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>#8b04ec</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox26">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Build</Value>
+                                  <Style>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox26</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>#8b04ec</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox28">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Patch Level</Value>
+                                  <Style>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox28</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>#8b04ec</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox18">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Version</Value>
+                                  <Style>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox18</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>#8b04ec</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Status">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Status.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Status</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "#c0c0c0", "#ffffff")</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox6">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox6</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=code.getcolor(Fields!Status.Value)</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Hostname">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Hostname.Value</Value>
+                                  <Style>
+                                    <TextDecoration>Underline</TextDecoration>
+                                    <Color>Blue</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Hostname</rd:DefaultName>
+                          <ActionInfo>
+                            <Actions>
+                              <Action>
+                                <Drillthrough>
+                                  <ReportName>Device Client Health Status</ReportName>
+                                  <Parameters>
+                                    <Parameter Name="Device">
+                                      <Value>=Fields!Hostname.Value</Value>
+                                    </Parameter>
+                                  </Parameters>
+                                </Drillthrough>
+                              </Action>
+                            </Actions>
+                          </ActionInfo>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "#c0c0c0", "#ffffff")</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <rd:Selected>true</rd:Selected>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="LastLoggedOnUser">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!LastLoggedOnUser.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>LastLoggedOnUser</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "#c0c0c0", "#ffffff")</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Timestamp">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Timestamp.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Timestamp</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "#c0c0c0", "#ffffff")</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Manufacturer">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Manufacturer.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Manufacturer</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "#c0c0c0", "#ffffff")</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Model">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Model.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Model</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "#c0c0c0", "#ffffff")</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="OperatingSystem">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!OperatingSystem.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>OperatingSystem</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "#c0c0c0", "#ffffff")</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Build">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Build.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Build</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "#c0c0c0", "#ffffff")</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="PatchLevel">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!PatchLevel.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>PatchLevel</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "#c0c0c0", "#ffffff")</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Version">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Version.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Version</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "#c0c0c0", "#ffffff")</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="Details" />
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>AskGarthSQL</DataSetName>
+            <Top>1.75in</Top>
+            <Height>0.5in</Height>
+            <Width>13.48333in</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Textbox Name="Textbox13">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=System.String.format("Client Health Status: {0} ", join(Parameters!chs.Label,", "))</Value>
+                    <Style>
+                      <FontSize>16pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                      <Color>#569343</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox11</rd:DefaultName>
+            <Top>1.25in</Top>
+            <Height>0.5in</Height>
+            <Width>6.75in</Width>
+            <ZIndex>3</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox14">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=System.String.format("CHS Script Version: {0} ", join(Parameters!CHSVersion.Label,", "))</Value>
+                    <Style>
+                      <FontSize>16pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                      <Color>#569343</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox11</rd:DefaultName>
+            <Top>1.25in</Top>
+            <Left>6.75in</Left>
+            <Height>0.5in</Height>
+            <Width>6.75in</Width>
+            <ZIndex>4</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+        </ReportItems>
+        <Height>2.41667in</Height>
+        <Style />
+      </Body>
+      <Width>13.5in</Width>
+      <Page>
+        <PageFooter>
+          <Height>0.63056in</Height>
+          <PrintOnFirstPage>true</PrintOnFirstPage>
+          <PrintOnLastPage>true</PrintOnLastPage>
+          <ReportItems>
+            <Textbox Name="Textbox1">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>="Page "&amp;Globals!PageNumber &amp;" of "&amp;Globals!TotalPages</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox1</rd:DefaultName>
+              <Top>0.375in</Top>
+              <Height>0.25in</Height>
+              <Width>2in</Width>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox2">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>="Created on "&amp; Globals!ExecutionTime</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox2</rd:DefaultName>
+              <Top>0.375in</Top>
+              <Left>10.5in</Left>
+              <Height>0.25in</Height>
+              <Width>3in</Width>
+              <ZIndex>1</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Image Name="Image1">
+              <Source>Embedded</Source>
+              <Value>AskGarthColor01</Value>
+              <Sizing>FitProportional</Sizing>
+              <ActionInfo>
+                <Actions>
+                  <Action>
+                    <Hyperlink>https://askgarth.com/</Hyperlink>
+                  </Action>
+                </Actions>
+              </ActionInfo>
+              <Top>0.01389in</Top>
+              <Left>5.75in</Left>
+              <Height>0.61667in</Height>
+              <Width>2in</Width>
+              <ZIndex>2</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Image>
+          </ReportItems>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </PageFooter>
+        <PageHeight>8.5in</PageHeight>
+        <PageWidth>11in</PageWidth>
+        <LeftMargin>0.25in</LeftMargin>
+        <RightMargin>0.25in</RightMargin>
+        <TopMargin>0.25in</TopMargin>
+        <BottomMargin>0.25in</BottomMargin>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="ConfigMgrHealth">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>All ConfigMgr Health Clients</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>ReportParameter1</Prompt>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="Collection">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>All Systems</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>ReportParameter1</Prompt>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="chs">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>CHS</DataSetName>
+          <ValueField>Status</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <Prompt>Client Health Status</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>CHS</DataSetName>
+          <ValueField>Status</ValueField>
+          <LabelField>Status</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <MultiValue>true</MultiValue>
+    </ReportParameter>
+    <ReportParameter Name="CHSVersion">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>Version</DataSetName>
+          <ValueField>Version</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <Prompt>CHS Script Version </Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>Version</DataSetName>
+          <ValueField>Version</ValueField>
+          <LabelField>Version</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <MultiValue>true</MultiValue>
+    </ReportParameter>
+  </ReportParameters>
+  <ReportParametersLayout>
+    <GridLayoutDefinition>
+      <NumberOfColumns>4</NumberOfColumns>
+      <NumberOfRows>2</NumberOfRows>
+      <CellDefinitions>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>ConfigMgrHealth</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>Collection</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>2</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>chs</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>3</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>CHSVersion</ParameterName>
+        </CellDefinition>
+      </CellDefinitions>
+    </GridLayoutDefinition>
+  </ReportParametersLayout>
+  <Code>Private colorPalette As String() = {"#F25430","#404959","#D5C72B","#9C4D1F",
+"#494C8C","#D0320d","#3C5956","#F23078","#3067F2","#F27630","#549D83","#F2309F",
+"#D068B3","#F29830","#129AB8","#BF624C","#18C9F2","#D52B69","#A6F230","#FF9981",
+"#D5692B","#D52B8B","#D5862B","#2B5BD5","#7db781","#B0D9D5","#F25430","#73D8B3",
+"#91D52B","#9D6154","#2BD597","#DC7058","#B84025","#9C1F66","#9C621F","#814F44",
+"#7988AD","#F2933D","#505A73","#E02BCB","#A41f00","#4e948d","#1309D9","#15E66F",
+"#3E1F9B","#FF7858","#2DE0BC","#D58335","#ED77CC","#129AB8","#09632A","#A0264D"}
+
+Private count As Integer = 0
+Private mapping As New System.Collections.Hashtable()
+
+Public Function GetColor(ByVal groupingValue As String) As String
+	Dim c As String
+	If groupingValue = "Both" Then
+		C = "#00ff00"
+	elseif groupingValue = "Health Only" Then
+		C = "#97989a"
+	elseif groupingValue = "ConfigMgr Only" Then
+		C = "#0468BF"
+	else
+		If mapping.ContainsKey(groupingValue) Then
+			Return mapping(groupingValue)
+		End If
+		c = colorPalette(count Mod colorPalette.Length)
+		count = count + 1
+		mapping.Add(groupingValue, c)
+	end if
+	Return c
+End Function</Code>
+  <EmbeddedImages>
+    <EmbeddedImage Name="AskGarthColor01">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>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</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>407f90a5-9185-4492-bff0-12abdac28cfe</rd:ReportID>
+</Report>
