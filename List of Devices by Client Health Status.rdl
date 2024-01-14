@@ -9,7 +9,7 @@
       <am:Name>SSDTRS</am:Name>
       <am:Version>17.8.34330.188</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2024-01-06T21:04:13.4140499Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2024-01-13T21:16:54.3595425Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <Author>Garth Jones from AskGarth</Author>
@@ -460,7 +460,7 @@ Order by
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>ConfigMgr Client Health Dashboard</Value>
+                    <Value>List of Devices by Client Health Status</Value>
                     <Style>
                       <FontSize>36pt</FontSize>
                       <Color>#0d0d0d</Color>
@@ -1012,7 +1012,6 @@ Order by
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>

@@ -9,7 +9,7 @@
       <am:Name>SSDTRS</am:Name>
       <am:Version>17.8.34330.188</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2024-01-07T01:27:50.6806417Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2024-01-13T21:20:00.0847621Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <Author>Garth Jones from AskGarth</Author>
@@ -407,7 +407,7 @@ From
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Device ConfigMgr Client Health</Value>
+                    <Value>Device Client Health Status</Value>
                     <Style>
                       <FontSize>36pt</FontSize>
                       <Color>#0d0d0d</Color>
@@ -865,7 +865,7 @@ From
             <DataSetName>AskGarthSQL</DataSetName>
             <Top>1.5in</Top>
             <Height>0.5in</Height>
-            <Width>7.5in</Width>
+            <Width>7.50001in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -3653,7 +3653,6 @@ From
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
